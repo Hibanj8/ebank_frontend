@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
 
 export default function ClientDashboard() {
     const navigate = useNavigate();
@@ -9,7 +11,7 @@ export default function ClientDashboard() {
     const [solde, setSolde] = useState(0);
     const [operations, setOperations] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
-    const [totalPages, setTotalPages] = useState(1); 
+    const [totalPages, setTotalPages] = useState(1);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -65,7 +67,7 @@ export default function ClientDashboard() {
     const handleCompteChange = (e) => {
         const numero = e.target.value;
         setSelectedNumero(numero);
-        setCurrentPage(0); 
+        setCurrentPage(0);
         fetchDashboardInfo(numero);
     };
 
@@ -75,81 +77,85 @@ export default function ClientDashboard() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 p-10">
-            <div className="bg-white rounded-xl shadow p-6">
-                <h1 className="text-2xl font-bold text-gray-800 mb-4">Tableau de bord client</h1>
+        <>
+            <Header />
+            <div className="min-h-screen bg-gray-100 p-10">
+                <div className="bg-white rounded-xl shadow p-6">
+                    <h1 className="text-2xl font-bold text-gray-800 mb-4">Tableau de bord client</h1>
 
-                {comptes.length > 0 ? (
-                    <>
-                        <div className="mb-4">
-                            <label className="block mb-1 text-sm font-medium text-gray-700">
-                                Sélectionner un compte :
-                            </label>
-                            <select
-                                className="w-full p-3 border rounded-lg"
-                                onChange={handleCompteChange}
-                                value={selectedNumero}
-                            >
-                                {comptes.map((compte) => (
-                                    <option key={compte} value={compte}>
-                                        {compte}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                    {comptes.length > 0 ? (
+                        <>
+                            <div className="mb-4">
+                                <label className="block mb-1 text-sm font-medium text-gray-700">
+                                    Sélectionner un compte :
+                                </label>
+                                <select
+                                    className="w-full p-3 border rounded-lg"
+                                    onChange={handleCompteChange}
+                                    value={selectedNumero}
+                                >
+                                    {comptes.map((compte) => (
+                                        <option key={compte} value={compte}>
+                                            {compte}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                        <div className="mb-4">
-                            <p className="text-gray-600">
-                                <strong>RIB :</strong> {selectedNumero}
-                            </p>
-                            <p className="text-gray-600">
-                                <strong>Solde :</strong> {solde} MAD
-                            </p>
-                        </div>
+                            <div className="mb-4">
+                                <p className="text-gray-600">
+                                    <strong>RIB :</strong> {selectedNumero}
+                                </p>
+                                <p className="text-gray-600">
+                                    <strong>Solde :</strong> {solde} MAD
+                                </p>
+                            </div>
 
-                        <div className="mt-6">
-                            <h2 className="text-lg font-semibold mb-2">10 dernières opérations</h2>
-                            {operations.length === 0 ? (
-                                <p className="text-gray-500">Aucune opération disponible.</p>
-                            ) : (
-                                <div className="overflow-x-auto">
-                                    <table className="w-full table-auto text-sm text-left">
-                                        <thead className="bg-gray-200 text-gray-600">
-                                            <tr>
-                                                <th className="p-3">Date</th>
-                                                <th className="p-3">Type</th>
-                                                <th className="p-3">Intitulé</th>
-                                                <th className="p-3">Montant</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {operations.map((op, index) => (
-                                                <tr key={index} className="border-t">
-                                                    <td className="p-3">{formatDate(op.date)}</td>
-                                                    <td className="p-3">{op.type}</td>
-                                                    <td className="p-3">{op.intitule}</td>
-                                                    <td className="p-3">{op.montant} MAD</td>
+                            <div className="mt-6">
+                                <h2 className="text-lg font-semibold mb-2">10 dernières opérations</h2>
+                                {operations.length === 0 ? (
+                                    <p className="text-gray-500">Aucune opération disponible.</p>
+                                ) : (
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full table-auto text-sm text-left">
+                                            <thead className="bg-gray-200 text-gray-600">
+                                                <tr>
+                                                    <th className="p-3">Date</th>
+                                                    <th className="p-3">Type</th>
+                                                    <th className="p-3">Intitulé</th>
+                                                    <th className="p-3">Montant</th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            )}
-                        </div>
+                                            </thead>
+                                            <tbody>
+                                                {operations.map((op, index) => (
+                                                    <tr key={index} className="border-t">
+                                                        <td className="p-3">{formatDate(op.date)}</td>
+                                                        <td className="p-3">{op.type}</td>
+                                                        <td className="p-3">{op.intitule}</td>
+                                                        <td className="p-3">{op.montant} MAD</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                            </div>
 
-                        <div className="mt-8">
-                            <button
-                                onClick={() => navigate("/virement")}
-                                className="px-6 py-3 bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-lg shadow"
-                            >
-                                Nouveau virement
-                            </button>
-                        </div>
-                    </>
-                ) : (
-                    <p className="text-red-500">Aucun compte bancaire trouvé.</p>
-                )}
+                            <div className="mt-8">
+                                <button
+                                    onClick={() => navigate("/virement")}
+                                    className="px-6 py-3 bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-lg shadow"
+                                >
+                                    Nouveau virement
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                        <p className="text-red-500">Aucun compte bancaire trouvé.</p>
+                    )}
+                </div>
             </div>
-        </div>
+            <Footer />
+        </>
     );
 }

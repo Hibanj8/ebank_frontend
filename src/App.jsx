@@ -4,7 +4,10 @@ import { useEffect } from "react";
 import LoginForm from './pages/LoginForm';
 import ClientDashboard from './pages/ClientDashboard';
 import AgentntDashboard from './pages/AgentDashboard';
+import CreateClient from './pages/CreateClient';
+import CreateCompte from './pages/CreateCompte';
 import UpdatePassword from './pages/UpdatePassword';
+import NewTransfer from './pages/NewTransfer';
 
 function App() {
   useEffect(() => {
@@ -15,7 +18,7 @@ function App() {
       const now = Date.now();
       if (now >= parseInt(expiration)) {
         localStorage.clear();
-        window.location.href = "/"; // ou navigate("/")
+        window.location.href = "/"; 
       } else {
         const timeout = setTimeout(() => {
           localStorage.clear();
@@ -32,7 +35,10 @@ function App() {
         <Route path="/" element={<LoginForm />} />
         <Route path="/client/dashboard" element={<ClientDashboard />} />
         <Route path="/agent/dashboard" element={<AgentntDashboard />} />
+        <Route path="/create-client" element={<CreateClient />} />
+        <Route path="/create-compte" element={<CreateCompte />} />
         <Route path="/changer-mot-de-passe" element={<UpdatePassword />} />
+        <Route path="/virement" element={<NewTransfer />} />
       </Routes>
     </BrowserRouter>
   );
